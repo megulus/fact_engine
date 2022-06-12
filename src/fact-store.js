@@ -7,13 +7,13 @@ export class FactStore {
         this.numPlaceholderSolutions = {};
     }
 
-    getEntries(name) {
+    getFacts(name) {
         return this.allTables[name];
     }
 
     addFact(name, args) {
-        if (this.getEntries(name)) {
-            this.getEntries(name).push(args);
+        if (this.getFacts(name)) {
+            this.getFacts(name).push(args);
         } else {
             this.allTables[name] = [args];
         }
@@ -35,7 +35,7 @@ export class FactStore {
         return arr1.every((value, index) => value === arr2[index])
     }
 
-    isMatch(name, query, entry) {
+    isMatch(name, query, fact) {
         const candidate = [];
         const tempPlaceholderVals = {};
         for (let i = 0; i < query.length; i++) {
@@ -44,14 +44,14 @@ export class FactStore {
                 if (tempPlaceholderVals[placeholderName]) {
                     candidate[i] = tempPlaceholderVals[placeholderName]
                 } else {
-                    candidate[i] = entry[i];
-                    tempPlaceholderVals[placeholderName] = entry[i];
+                    candidate[i] = fact[i];
+                    tempPlaceholderVals[placeholderName] = fact[i];
                 }
             } else {
                 candidate[i] = query[i];
             }
         }
-        if (this.arraysEqual(candidate, entry)) {
+        if (this.arraysEqual(candidate, fact)) {
             if (!this.hasPlaceholders) {
                 return true;
             }
@@ -75,18 +75,18 @@ export class FactStore {
         }
     }
 
-    query(name, arr) {
-        for (let i = 0; i < arr.length; i++) {
-            if (this.isPlaceholder(arr[i])) {
+    query(name, queryArgs) {
+        for (let i = 0; i < queryArgs.length; i++) {
+            if (this.isPlaceholder(queryArgs[i])) {
                 this.hasPlaceholders = true;
-                const placeholder = new Placeholder(arr[i], i);
-                this.placeholderMap[arr[i]] = placeholder;
+                const placeholder = new Placeholder(queryArgs[i]);
+                this.placeholderMap[queryArgs[i]] = placeholder;
             }
         }
         let matched = false;
-        const entries = this.getEntries(name)
+        const entries = this.getFacts(name)
         for (let i = 0; i < entries.length; i++) {
-            matched = this.isMatch(name, arr, entries[i]);
+            matched = this.isMatch(name, queryArgs, entries[i]);
         }
         this.logOutput(name, matched);
     }
@@ -113,25 +113,20 @@ export class FactStore {
 }
 
 class Placeholder {
-    constructor (name, position) {
+    constructor (name) {
         this.name = name;
-        this.position = position;
-        this.possibleValues = [];
+        this.boundValues = [];
     }
 
     name () {
         return this.name;
     }
 
-    position () {
-        return this.position;
-    }
-
     valueAt (index) {
-        return this.possibleValues[index];
+        return this.boundValues[index];
     }
 
     addValue(val) {
-        this.possibleValues.push(val)
+        this.boundValues.push(val)
     }
 }
