@@ -14,18 +14,30 @@ export class Parser {
 
     #parseCommand (str) {
         const regex = /([A-Z]+)/;
-        return str.match(regex)[1];
+        const match = str.match(regex);
+        if (match && match.length > 0) {
+            return match[1];
+        }
+        return null;
     }
 
     #parseArgs (str) {
+        str = str.replaceAll(',', '');
         const regex = /\((.*)\)/;
         const match = str.match(regex)[1];
-        return match.split(' ');
+        if (match) {
+            return match.split(' ');
+        }
+        return null;
     }
 
     #parseFact (str) {
-        const regex = /([a-z]+_[a-z]+)/;
-        return str.match(regex)[1];
+        const regex = /(?!\()([a-z]+[_]*)+\s/;
+        const match = str.match(regex)
+        if (match && match.length > 0) {
+            return match[0].trim()
+        }
+        return null;
     }
 
     #parseLines () {
@@ -51,15 +63,15 @@ export class Command {
         this.args = args;
     }
 
-    operation( ) {
+    getOperation () {
         return this.operation;
     }
 
-    fact () {
+    getFact () {
         return this.fact;
     }
 
-    args () {
+    getArgs () {
         return this.args;
     }
 }
