@@ -5,17 +5,17 @@
 ### Setup Instructions
 
 Note: These instructions were tested on MacOS Version 10.14.6 running
-Node version 17.7.1.
+Node version 17.7.1, and npm version 8.12.1.
 
-After unzipping project directory, run `npm install` in the project root directory. 
+After unzipping project directory, in a terminal window navigate to project root director and  run `npm install`. 
 
 ### Running
 
-In the project rood directory, run `node index.js`
+In the project root directory, run `node src/index.js`
 
 The four example inputs are in the examples directory. Add any
 input file you'd like to test here, and modify line 7 of index.js to 
-use your filename.
+use your filename. Currently, 'in3.txt' is hardcoded, so the contents of './examples/in3.txt' will be read and processed.
 
 ### Future Improvements
 
