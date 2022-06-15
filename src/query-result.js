@@ -1,16 +1,8 @@
 
 export class QueryResult {
-    constructor(assertion, queryArgs) {
-        this.assertion = assertion;
-        this.queryArgs = queryArgs;
-        // this.hasPlaceholders = false;
-        //this.numPlacholderResults = 0;
+    constructor() {
         this.booleanResult = undefined;
         this.bindings = []
-
-        // this.queryArgs.forEach((arg) => {
-        //     if (this.#isPlaceholderArg(arg)) this.hasPlaceholders = true;
-        // });
     }
 
     addResult (isMatch, boundPlaceholders) {
@@ -24,15 +16,6 @@ export class QueryResult {
         } else {
             this.booleanResult = false
         }
-    }
-
-    isPlaceholderArg (arg) {
-        if (typeof arg === 'string') {
-            const firstChar = arg.charAt(0);
-            const isLetter = firstChar.toLowerCase() !== firstChar.toUpperCase();
-            return isLetter && (firstChar === firstChar.toUpperCase());
-        }
-        return false;
     }
 
     logResult () {
@@ -51,22 +34,3 @@ export class QueryResult {
         }
     }
 }
-
-// class Placeholder {
-//     constructor (name) {
-//         this.name = name;
-//         this.boundValues = [];
-//     }
-//
-//     name () {
-//         return this.name;
-//     }
-//
-//     valueAt (index) {
-//         return this.boundValues[index];
-//     }
-//
-//     addValue(val) {
-//         this.boundValues.push(val)
-//     }
-// }
